@@ -3,7 +3,7 @@ This Weather App is a simple web application that allows users to check the weat
 
 **Features**
 
-Current Weather Display: Shows the current weather conditions (temperature, humidity, wind speed, etc.) for the specified location.
+**Current Weather Display:** Shows the current weather conditions (temperature, humidity, wind speed, etc.) for the specified location.
 
-Search Functionality: Allows users to search for weather information by city name.
+**Search Functionality:** Allows users to search for weather information by city name.
 
