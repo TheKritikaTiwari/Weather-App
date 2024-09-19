@@ -2,23 +2,25 @@ const options = {
   method: 'GET',
   headers: {
     'X-RapidAPI-Key': '8650f509d5msh707ad6cd4aeeb5ep1932bbjsn335ea99c6715',
-    'X-RapidAPI-Host': 'weather-by-api-ninjas.p.rapidapi.com'
+    'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
   }
 };
 
 const temp = document.getElementById('temp');
+const cloud = document.getElementById('cloud');
+const condition = document.getElementById('condition');
 const feels_like = document.getElementById('feels_like');
 const humidity = document.getElementById('humidity');
-const min_temp = document.getElementById('min_temp');
-const max_temp = document.getElementById('max_temp');
+const precipitation = document.getElementById('precipitation');
 const wind_speed = document.getElementById('wind_speed');
 const wind_degrees = document.getElementById('wind_degrees');
-const sunrise = document.getElementById('sunrise');
-const sunset = document.getElementById('sunset');
+const dewpoint = document.getElementById('dewpoint');
 
 const getWeather = (city) => {
-  cityName.innerHTML = city
-  fetch('https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=' +city, options)
+  cityName.innerHTML = city;
+  const url = `https://weatherapi-com.p.rapidapi.com/current.json?q=${city}`;
+
+  fetch(url, options)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -26,20 +28,43 @@ const getWeather = (city) => {
       return response.json();
     })
     .then(data => {
-      temp.innerHTML = data.temp;
-      feels_like.innerHTML = data.feels_like;
-      humidity.innerHTML = data.humidity;
-      min_temp.innerHTML = data.min_temp;
-      max_temp.innerHTML = data.max_temp;
-      wind_speed.innerHTML = data.wind_speed;
-      wind_degrees.innerHTML = data.wind_degrees;
-      sunrise.innerHTML = data.sunrise;
-      sunset.innerHTML = data.sunset;
+      const weather = data.current;
+
+      temp.innerHTML = weather.temp_c + " °C";
+      cloud.innerHTML = weather.cloud + " %";
+      condition.innerHTML = "";
+      feels_like.innerHTML = weather.feelslike_c + " °C";
+      humidity.innerHTML = weather.humidity + " %";
+      precipitation.innerHTML = weather.precip_mm + " mm"; 
+      wind_speed.innerHTML = weather.wind_kph + " kph";
+      wind_degrees.innerHTML = weather.wind_degree + "°";
+      dewpoint.innerHTML = weather.dewpoint_c + " °C";
+
+      let conditionText = "";
+      const cloudCoverage = weather.cloud;
+
+      if (cloudCoverage <= 10) {
+        conditionText = "Sunny";
+      } else if (cloudCoverage <= 30) {
+        conditionText = "Mostly Sunny";
+      } else if (cloudCoverage <= 50) {
+        conditionText = "Partly Cloudy";
+      } else if (cloudCoverage <= 70) {
+        conditionText = "Mostly Cloudy";
+      } else if (cloudCoverage <= 90) {
+        conditionText = "Cloudy";
+      } else {
+        conditionText = "Overcast";
+      }
+
+      condition.innerHTML = conditionText;
+
     })
     .catch(error => {
       console.error(error);
     });
-}
+};
+
 submit.addEventListener("click", (e) => {
   e.preventDefault()
   getWeather(city.value)
