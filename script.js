@@ -15,6 +15,13 @@ const precipitation = document.getElementById('precipitation');
 const wind_speed = document.getElementById('wind_speed');
 const wind_degrees = document.getElementById('wind_degrees');
 const dewpoint = document.getElementById('dewpoint');
+const weatherImage = document.getElementById('weatherImage');
+
+const weatherImages = {
+  sunny: 'Images/Sunny.jpg',
+  cloudy: 'Images/Cloudy.jpg',
+  p_cloudy: 'Images/Partly_Cloudy.jpg',
+};
 
 const getWeather = (city) => {
   cityName.innerHTML = city;
@@ -32,7 +39,6 @@ const getWeather = (city) => {
 
       temp.innerHTML = weather.temp_c + " °C";
       cloud.innerHTML = weather.cloud + " %";
-      condition.innerHTML = "";
       feels_like.innerHTML = weather.feelslike_c + " °C";
       humidity.innerHTML = weather.humidity + " %";
       precipitation.innerHTML = weather.precip_mm + " mm"; 
@@ -59,14 +65,24 @@ const getWeather = (city) => {
 
       condition.innerHTML = conditionText;
 
+      if (conditionText.includes('Sunny')) {
+        weatherImage.src = weatherImages.sunny;
+      } else if (conditionText.includes('Mostly Sunny') || conditionText.includes('Partly Cloudy') || conditionText.includes('Mostly Cloudy')) {
+        weatherImage.src = weatherImages.p_cloudy;
+      } else if (conditionText.includes('Cloudy')) {
+        weatherImage.src = weatherImages.cloudy;
+      }
+
     })
     .catch(error => {
       console.error(error);
     });
-};
+  };
 
-submit.addEventListener("click", (e) => {
-  e.preventDefault()
-  getWeather(city.value)
-})
+  submit.addEventListener("click", (e) => {
+    e.preventDefault()
+    getWeather(city.value);
+  }
+);
+
 getWeather("Delhi");
